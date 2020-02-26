@@ -2,7 +2,6 @@ package com.contas.pagar.contas.controller;
 
 import com.contas.pagar.contas.models.Conta;
 import com.contas.pagar.contas.repository.ContaRepository;
-import com.contas.pagar.contas.repository.CredorRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -47,6 +46,7 @@ public class ContaController implements IController<Conta> {
     @PostMapping("")
     @Override
     public ResponseEntity<?> insert(@RequestBody Conta entity) {
+        System.out.println(entity);
         return ResponseEntity.ok().body(repo.saveAndFlush(entity));
     }
 

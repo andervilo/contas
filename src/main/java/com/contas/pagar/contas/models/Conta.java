@@ -26,7 +26,8 @@ public class Conta {
 
     private Date vencimento;
 
-    @JsonIgnore
+    private Date pagamento;
+
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "credor_id", nullable = false)
     private Credor credor;
@@ -55,6 +56,15 @@ public class Conta {
         this.vencimento = vencimento;
     }
 
+    public Date getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Date pagamento) {
+        this.pagamento = pagamento;
+    }
+
+    @JsonIgnore
     public Credor getCredor() {
         return credor;
     }
@@ -63,5 +73,12 @@ public class Conta {
         this.credor = credor;
     }
 
+	@Override
+	public String toString() {
+		return "Conta [credor=" + credor + ", id=" + id + ", pagamento=" + pagamento + ", valor=" + valor
+				+ ", vencimento=" + vencimento + "]";
+	}
+
     
+
 }

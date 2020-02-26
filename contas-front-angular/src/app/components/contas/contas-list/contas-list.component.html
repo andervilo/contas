@@ -1,3 +1,27 @@
-<p>
-  contas-list works!
-</p>
+<div class="row">
+  <div class="col mb-2 mt-2">
+      <a class="btn btn-info btn-sm" routerLink="/conta-add">Adicionar Conta</a>
+  </div>
+</div>
+
+<table class="table table-striped table-inverse">
+  <thead class="thead-inverse">
+      <tr>
+          <th>#</th>
+          <th>Valor (R$)</th>
+          <th>Data Venciemnto</th>
+          <th>Data Pagamento</th>
+          <th></th>
+      </tr>
+      </thead>
+      <tbody>
+          <tr *ngFor="let c of contas">
+              <td>{{c.id}}</td>
+              <td>{{c.valor}}</td>
+              <td>{{c.vencimento}}</td>
+              <td>{{c.pagamento}}</td>
+              <td><button title="Excluir linha" (click)="remove(c.id)" class="btn btn-danger text-white btn-sm">Excluir</button></td>
+          <td><a title="Editar linha" routerLink="/conta-edit/{{c.id}}" class="btn btn-warning text-white btn-sm">Editar</a></td>
+          </tr>
+      </tbody>
+</table>

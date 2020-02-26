@@ -9,8 +9,8 @@ import { Routes, RouterModule } from '@angular/router';
 
 const routes: Routes = [
   {    path: "", component: ContasListComponent   },
-  {    path: "contas-add", component: ContasAddComponent   },
-  {    path: "contas-edit/:id", component: ContasEditComponent   },
+  {    path: "conta-add", component: ContasAddComponent   },
+  {    path: "conta-edit/:id", component: ContasEditComponent   },
   {    path: "credor-list", component: CredorListComponent   },
   {    path: "credor-add", component: CredorAddComponent   },
   {    path: "credor-edit/:id", component: CredorEditComponent   },

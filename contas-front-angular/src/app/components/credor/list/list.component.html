@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col mb-2 mt-2">
-      <a class="btn btn-info btn-sm" routerLink="/add-peca">Adicionar Peça</a>
+      <a class="btn btn-info btn-sm" routerLink="/credor-add">Adicionar Credor</a>
   </div>
 </div>
 
@@ -19,7 +19,7 @@
               <td>{{c.nome}}</td>
               <td>{{c.cpf}}</td>
               <td><button title="Excluir linha" (click)="remove(c.id)" class="btn btn-danger text-white btn-sm">Excluir</button></td>
-          <td><a title="Editar linha" routerLink="/edit-peca/{{c.id}}" class="btn btn-warning text-white btn-sm">Editar</a></td>
+          <td><a title="Editar linha" routerLink="/credor-edit/{{c.id}}" class="btn btn-warning text-white btn-sm">Editar</a></td>
           </tr>
       </tbody>
 </table>

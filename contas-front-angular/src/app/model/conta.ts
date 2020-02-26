@@ -1,5 +1,7 @@
 interface Conta {
   id: number;
-  nome: string;
-  cpf: string;
+  valor: number;
+  vencimento: Date;
+  pagamento: Date;
+  credor: Credor;
 }

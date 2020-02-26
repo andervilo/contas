@@ -62,6 +62,11 @@ public class Credor {
     public void setContas(List<Conta> contas) {
         this.contas = contas;
     }
+
+	@Override
+	public String toString() {
+		return "Credor [contas=" + contas + ", cpf=" + cpf + ", id=" + id + ", nome=" + nome + "]";
+	}
     
     
 }

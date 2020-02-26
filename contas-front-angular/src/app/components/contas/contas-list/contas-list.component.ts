@@ -11,12 +11,19 @@ export class ContasListComponent implements OnInit {
   constructor(private service: ContasService) { }
 
   ngOnInit() {
+    this.findAll();
   }
 
   findAll(){
     this.service.getList().subscribe(res => {
       this.contas = res;
     });
+  }
+
+  remove(id: number){
+    this.service.delete(id).subscribe(res => {
+      this.findAll();
+    })
   }
 
 }

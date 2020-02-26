@@ -6,7 +6,7 @@ import { HttpClient } from '@angular/common/http';
 @Injectable({
   providedIn: 'root'
 })
-export class ContasService extends GenericService<Credor>{
+export class ContasService extends GenericService<Conta>{
 
   constructor(protected http: HttpClient, private globals: Globals) {
     super(http, globals.apiContas);

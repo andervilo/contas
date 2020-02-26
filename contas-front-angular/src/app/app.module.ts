@@ -1,5 +1,3 @@
-import { ContasService } from './service/contas.service';
-import { CredoresService } from './service/credores.service';
 import { CredorEditComponent } from './components/credor/edit/edit.component';
 import { CredorAddComponent } from './components/credor/add/add.component';
 import { CredorListComponent } from './components/credor/list/list.component';
@@ -13,6 +11,7 @@ import { ContasAddComponent } from './components/contas/contas-add/contas-add.co
 import { ContasEditComponent } from './components/contas/contas-edit/contas-edit.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
+import { Globals } from './globals';
 
 @NgModule({
   declarations: [
@@ -25,12 +24,13 @@ import { FormsModule } from '@angular/forms';
     ContasEditComponent
   ],
   imports: [
-    BrowserModule,
+  
+  BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule
   ],
-  providers: [CredoresService,  ContasService],
+  providers: [Globals],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
