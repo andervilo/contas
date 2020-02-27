@@ -1,7 +1,6 @@
 package com.contas.pagar.contas.controller;
 
-import com.contas.pagar.contas.models.Conta;
-import com.contas.pagar.contas.repository.ContaRepository;
+import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +14,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.contas.pagar.contas.models.Conta;
+import com.contas.pagar.contas.repository.ContaRepository;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 /**
  * Conta
  */
@@ -25,6 +31,9 @@ public class ContaController implements IController<Conta> {
 
     @Autowired
     private ContaRepository repo;
+    
+    @Autowired
+    ServletContext context;
 
     @GetMapping("")
     @Override
@@ -34,8 +43,22 @@ public class ContaController implements IController<Conta> {
 
     @GetMapping("/{id}")
     @Override
-    public ResponseEntity<?> findById(@PathVariable Long id) {
-        return ResponseEntity.ok().body(repo.findById(id).get());
+    public ResponseEntity<?> findById(@PathVariable Long id) throws JsonProcessingException {
+    	ObjectMapper mapper = new ObjectMapper();
+    	
+    	Conta _conta = repo.findById(id).get();
+    	
+    	String contaString = mapper.writeValueAsString(_conta);
+    	
+    	JsonNode jsonNode = mapper.readTree(contaString);
+    	
+    	String newString = "{\"link\": \"cowtowncoder\"}";
+    	
+        JsonNode newNode = mapper.readTree(newString);
+    	
+    	((ObjectNode)jsonNode).set("credor", newNode);
+    	
+        return ResponseEntity.ok().body(jsonNode);
     }
 
     @GetMapping("/{id}/credor")
