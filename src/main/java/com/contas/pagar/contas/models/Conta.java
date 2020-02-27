@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
  * Conta
@@ -28,6 +28,7 @@ public class Conta {
 
     private Date pagamento;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "credor_id", nullable = false)
     private Credor credor;
@@ -64,7 +65,6 @@ public class Conta {
         this.pagamento = pagamento;
     }
 
-    @JsonIgnore
     public Credor getCredor() {
         return credor;
     }

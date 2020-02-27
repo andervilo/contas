@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 /**
  * Credor
@@ -26,7 +26,7 @@ public class Credor {
 
     private String cpf;
 
-	@JsonIgnore
+    @JsonBackReference
     @OneToMany(mappedBy = "credor", fetch = FetchType.EAGER,
             cascade = CascadeType.ALL)
     private List<Conta> contas = new ArrayList<Conta>();
