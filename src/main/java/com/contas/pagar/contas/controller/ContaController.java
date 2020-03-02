@@ -1,6 +1,10 @@
 package com.contas.pagar.contas.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +21,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.contas.pagar.contas.models.Conta;
 import com.contas.pagar.contas.repository.ContaRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
 
 /**
  * Conta
@@ -37,30 +43,17 @@ public class ContaController implements IController<Conta> {
 
     @GetMapping("")
     @Override
-    public ResponseEntity<?> index() {
-        return ResponseEntity.ok().body(repo.findAll());
+    public ResponseEntity<?> index(HttpServletRequest request) throws JsonMappingException, JsonProcessingException {
+        return ResponseEntity.ok().body(getListaContasComLink(repo.findAll(), request));
     }
 
     @GetMapping("/{id}")
     @Override
-    public ResponseEntity<?> findById(@PathVariable Long id) throws JsonProcessingException {
-    	ObjectMapper mapper = new ObjectMapper();
-    	
-    	Conta _conta = repo.findById(id).get();
-    	
-    	String contaString = mapper.writeValueAsString(_conta);
-    	
-    	JsonNode jsonNode = mapper.readTree(contaString);
-    	
-    	String newString = "{\"link\": \"cowtowncoder\"}";
-    	
-        JsonNode newNode = mapper.readTree(newString);
-    	
-    	((ObjectNode)jsonNode).set("credor", newNode);
-    	
-        return ResponseEntity.ok().body(jsonNode);
+    public ResponseEntity<?> findById(@PathVariable Long id, HttpServletRequest request) throws JsonProcessingException {    	
+    	Conta _conta = repo.findById(id).get();    	    	
+        return ResponseEntity.ok().body(getContaComLinks(_conta, request));
     }
-
+    
     @GetMapping("/{id}/credor")
     public ResponseEntity<?> findCredorByContaId(@PathVariable Long id) {
         return ResponseEntity.ok().body(repo.findById(id).get().getCredor());
@@ -88,5 +81,52 @@ public class ContaController implements IController<Conta> {
         repo.deleteById(id);
         return ResponseEntity.ok().body(true);
     }
-
+    
+    private List<JsonNode> getListaContasComLink(List<Conta> _contas, HttpServletRequest request) throws JsonMappingException, JsonProcessingException {
+    	List<JsonNode> ljn = new ArrayList<JsonNode>();
+    	
+    	_contas.forEach(conta -> {
+    		try {
+				ljn.add(getContaComLinks(conta, request));
+			} catch (JsonProcessingException e) {
+				e.printStackTrace();
+			}
+    	});
+    	
+    	return ljn;
+    }
+    
+    private JsonNode getContaComLinks(Conta _conta, HttpServletRequest request) throws JsonMappingException, JsonProcessingException {
+    	ObjectMapper mapper = new ObjectMapper();
+    	JsonNode contaJsonNode = mapper.readTree(mapper.writeValueAsString(_conta));
+    	((ObjectNode)contaJsonNode).set("credor", getCredorUrl(_conta, request));
+    	((ObjectNode)contaJsonNode).set("url", getUrl(_conta, request));
+    	
+    	return contaJsonNode;
+    }
+    
+    private String getBaseUrl(HttpServletRequest request) {
+    	return String.format("%s://%s:%d"
+    			.concat("/api/v1/contas/")
+    			,request.getScheme(),  request.getServerName(), request.getServerPort());
+    }
+    
+    private JsonNode getCredorUrl(Conta _conta, HttpServletRequest request) {
+    	String urlCredor = getBaseUrl(request);
+    	urlCredor = urlCredor.concat(Long.toString(_conta.getId())).concat("/credor");
+    	
+    	JsonNode credorNode = new TextNode(urlCredor);
+    	
+    	return credorNode;
+    }
+    
+    private JsonNode getUrl(Conta _conta, HttpServletRequest request) {
+    	String url = getBaseUrl(request);
+    	url = url.concat(Long.toString(_conta.getId()));
+    	
+    	JsonNode urlNode = new TextNode(url);
+    	
+    	return urlNode;
+    }
+    
 }

@@ -3,6 +3,8 @@ package com.contas.pagar.contas.controller;
 import com.contas.pagar.contas.models.Credor;
 import com.contas.pagar.contas.repository.CredorRepository;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,13 +30,13 @@ public class CredorController implements IController<Credor> {
 
     @GetMapping("")
     @Override
-    public ResponseEntity<?> index() {
+    public ResponseEntity<?> index(HttpServletRequest request) {
         return ResponseEntity.ok().body(repo.findAll());
     }
 
     @GetMapping("/{id}")
     @Override
-    public ResponseEntity<?> findById(@PathVariable Long id) {
+    public ResponseEntity<?> findById(@PathVariable Long id, HttpServletRequest request) {
         return ResponseEntity.ok().body(repo.findById(id).get());
     }
 
